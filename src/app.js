@@ -4,7 +4,10 @@ const path = require("path");
 // Npm Modules
 const express = require("express");
 const hbs = require("hbs");
+
 const app = express();
+
+const port = process.env.PORT || 3000;
 
 // My Modules
 const forecast = require("./utils/forecast");
@@ -36,20 +39,22 @@ app.get("/weather", (req, res) => {
       error: "No address provided"
     });
   }
-  geocode(req.query.address, (error, { latitude, longitude, location} = {}) => {
-    if (error) {
-      return res.send({ error });
-    }
-    forecast(latitude, longitude, (error, forecastData) => {
-      if (error) return res.send({ error });
-      res.send({
-        address: req.query.address,
-        forecast: forecastData,
-        location
+  geocode(
+    req.query.address,
+    (error, { latitude, longitude, location } = {}) => {
+      if (error) {
+        return res.send({ error });
+      }
+      forecast(latitude, longitude, (error, forecastData) => {
+        if (error) return res.send({ error });
+        res.send({
+          address: req.query.address,
+          forecast: forecastData,
+          location
+        });
       });
-    });
-    
-  });
+    }
+  );
   /*res.send({
     address: req.query.address
   }); */
@@ -86,6 +91,6 @@ app.get("*", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("App is running on port 3000");
+app.listen(port, () => {
+  console.log("App is running on port " + port);
 });

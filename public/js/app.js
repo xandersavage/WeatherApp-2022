@@ -20,7 +20,7 @@ weatherForm.addEventListener("submit", e => {
   if (location == " ") {
     console.log("Please type in a location");
   } else {
-    const myURL = "http://localhost:3000/weather?address=" + location;
+    const myURL = "/weather?address=" + location;
     fetch(myURL).then(response => {
       response.json().then(({ address, forecast, location, error } = {}) => {
         if (!error) {
